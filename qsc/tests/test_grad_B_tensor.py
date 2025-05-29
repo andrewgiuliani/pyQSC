@@ -122,6 +122,24 @@ class GradGradBTensorTests(unittest.TestCase):
                         np.testing.assert_allclose(s.grad_grad_B_alt[:,0,0,2], np.full(nphi, val), rtol=rtol, atol=atol)
                         
 class DirectionalDerivativeTests(unittest.TestCase):
+    """
+    This test computes the B(\phi), B'(\phi), and B''(\phi) on the magnetic
+    axis in two ways, where \phi is the standard cylindrical angle.  
+    
+    The first way uses the fact that B(\phi) = sG*B0*T(\phi), where T(\phi) is 
+    the tangent vector of the Frenet frame associated to the magnetic axis. Since
+    we have analytical expressions for the Frenet frame, we can differentiate them
+    with respect to \phi.
+
+    The second way relies on the gradB, and gradgradB tensors in pyqsc associated
+    to the NAE.  We know that hatB(\phi) = B(\Gamma(\phi)) where Bhat is the magnetic
+    field B evaluated on the magnetic axis, given by \Gamma(\phi).  Differentiating
+    this expression with respect to \phi and applying the chain rule, we obtain
+    a formula for hatB(\phi) that depends on derivative tensors of B.
+
+    With these two independent formulas for B, B', and B'', we can verify that
+    the two results are the same.
+    """
     def test_B_Bprime_Bprimeprime(self):
         rtol = 1e-6
         atol = 1e-10
