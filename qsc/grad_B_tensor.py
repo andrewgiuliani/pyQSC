@@ -1311,7 +1311,14 @@ def grad_grad_B_tensor_cylindrical(self):
     vector B=(B_R,B_phi,B_Z) at every point along the axis (hence with nphi points)
     where R, phi and Z are the standard cylindrical coordinates.
     '''
-    return np.transpose(self.grad_grad_B,(1,2,3,0))
+    n = self.normal_cylindrical.transpose()
+    b = self.binormal_cylindrical.transpose()
+    t = self.tangent_cylindrical.transpose()
+    Q = np.concatenate((n[:, None, :], b[:, None, :], t[:, None, :]), axis=1)
+
+    ggB_frenet = np.transpose(self.grad_grad_B,(1,2,3,0))
+    ggB_cyl = np.einsum('piz,qjz,rkz,pqrz->ijkz', Q, Q, Q, ggB_frenet)
+    return ggB_cyl
 
 def grad_grad_B_tensor_cartesian(self):
     '''
