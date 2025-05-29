@@ -141,8 +141,8 @@ class DirectionalDerivativeTests(unittest.TestCase):
     the two results are the same.
     """
     def test_B_Bprime_Bprimeprime(self):
-        rtol = 1e-6
-        atol = 1e-10
+        rtol = 1e-8
+        atol = 1e-8
         
         np.random.seed(0)
         for sG in [-1, 1]:
